@@ -99,10 +99,12 @@ public class Selection extends SpelNodeImpl {
 		SpelNodeImpl selectionCriteria = this.children[0];
 
 		if (operand instanceof Map<?, ?> mapdata) {
+			state.trackOperation();
 			Map<Object, Object> result = new HashMap<>();
 			Object lastKey = null;
 
 			for (Map.Entry<?, ?> entry : mapdata.entrySet()) {
+				state.trackOperation();
 				try {
 					TypedValue kvPair = new TypedValue(entry);
 					state.pushActiveContextObject(kvPair);
@@ -146,8 +148,10 @@ public class Selection extends SpelNodeImpl {
 			Iterable<?> data = (operand instanceof Iterable<?> iterable ? iterable :
 					Arrays.asList(ObjectUtils.toObjectArray(operand)));
 
+			state.trackOperation();
 			List<Object> result = new ArrayList<>();
 			for (Object element : data) {
+				state.trackOperation();
 				try {
 					state.pushActiveContextObject(new TypedValue(element));
 					state.enterScope();
